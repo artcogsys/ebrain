@@ -5,7 +5,7 @@
 from sklearn.kernel_ridge import KernelRidge
 class KernelRidgeRegression(object):
 
-    def __init__(self):  #Set kernel ridge parameters
+    def __init__(self):  #Define model
         alpha_=1.0
         coef0_=1
         degree_=3
