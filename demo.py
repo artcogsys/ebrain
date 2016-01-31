@@ -4,13 +4,14 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
+from scipy.stats import pearsonr
 
 # Import models
 from feature_models.Identity import Identity
 from response_models.KernelRidgeRegression import KernelRidgeRegression
 
 #Generate stimulus response pairs
-n_samples, n_features, n_voxels = 100, 15, 3
+n_samples, n_features, n_voxels = 100, 20, 100
 rng = np.random.RandomState(0)
 stimulus = rng.randn(n_samples, n_features) 
 response = rng.randn(n_samples,n_voxels) 
@@ -34,22 +35,36 @@ rm.fit(feature, response)
 response_hat = rm.predict(feature);
 
 # Analyze encoding performance
-R = np.diagonal(np.corrcoef(response,response_hat))
+
+# Row-wise Correlation Coefficient calculation for two 2D arrays:
+def corr2_coeff(A,B):
+    # Rowwise mean of input arrays & subtract from input arrays themeselves
+    A_mA = A - A.mean(1)[:,None]
+    B_mB = B - B.mean(1)[:,None]
+    # Sum of squares across rows
+    ssA = (A_mA**2).sum(1);
+    ssB = (B_mB**2).sum(1);
+    # Finally get corr coeff
+    return np.dot(A_mA,B_mB.T)/np.sqrt(np.dot(ssA[:,None],ssB[None]))
+
+# Get prediction / ground truth voxel correlations
+R = np.diagonal(corr2_coeff(response.T,response_hat.T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
-## Plot encoding performance Pyplot 
+# Plot encoding performance Pyplot 
 fig = plt.figure()
-plt.plot(sorted(R, reverse=True), color='blue', lw=2)
+plt.plot(np.arange(len(R))+1,sorted(R, reverse=True))
 fig.suptitle('encoding performance')
 plt.xlabel('voxel')
 yLab=plt.ylabel('R')
 yLab.set_rotation(0)
-plt.autoscale(enable=True, axis='both', tight=True)
+plt.ylim(0, 1)
 plt.xscale('log')
 
 ## Plot encoding performance Bokeh (Nicer but may require $ pip install bokeh)
 #from bokeh.plotting import figure, output_file, show
 #output_file("encoding_performance.html", title="encoding performance")
-#p = figure(title="econding performance", x_axis_label='voxel', y_axis_label='R',x_axis_type="log",x_range=[1, len(R)+1])
+#p = figure(title="econding performance", x_axis_label='voxel', 
+#            y_range=[0, 1], y_axis_label='R', x_axis_type="log", x_range=[1, len(R)])
 #p.line(np.arange(len(R))+1,sorted(R, reverse=True), line_width=2)
 #show(p)
