@@ -1,7 +1,9 @@
-#Kernal ridge regression - response model
+# Kernal ridge regression - response model
+# Fore more info see:
+# http://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html
+
 from sklearn.kernel_ridge import KernelRidge
 class KernelRidgeRegression(object):
-
 
     def __init__(self):  #Set kernel ridge parameters
         alpha_=1.0
