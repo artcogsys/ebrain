@@ -4,39 +4,53 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
+import tables
 import scipy.io
 
 # Import models
-
 from feature_models.Identity import Identity
 from response_models.KernelRidgeRegression import KernelRidgeRegression
 
-# Import data
-stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat')
+# Import data from the VIM-1 dataset, ROI=V1
+# See https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
+EstimatedResponses = tables.open_file('/home/ed/Documents/Code/ebrain/Data/EstimatedResponses.mat')
+Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat',struct_as_record=True)
+data_train = EstimatedResponses.get_node('/dataTrnS1')[:]
+data_val = EstimatedResponses.get_node('/dataValS1')[:]
+ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
+V1idx = np.nonzero(ROI==1)[0]
+V1resp_train = data_train[:,V1idx]
+V1resp_val = data_val[:,V1idx]
+stim_train = Stimuli["stimTrn"]
+stim_train = np.reshape(stim_train,[1750,128*128])
+stim_val = Stimuli["stimVal"]
+stim_val = np.reshape(stim_val,[120,128*128])
 
-#Generate stimulus response pairs
-n_samples, n_features, n_voxels = 100, 20, 100
-rng = np.random.RandomState(0)
-stimulus = rng.randn(n_samples, n_features) 
-response = rng.randn(n_samples,n_voxels) 
+# Select n random voxels for demo
+n_vox=10
+np.random.seed(0)
+target_vox=np.random.randint(len(V1idx), size=n_vox)
+V1resp_train=V1resp_train[:,target_vox]
+V1resp_val=V1resp_val[:,target_vox]
 
 # Define feature model
 fm = Identity()
 
 # Train feature model
-fm.fit(stimulus)
+fm.fit(stim_train)
 
 # Simulate feature model
-feature = fm.predict(stimulus)
+feature_train = fm.predict(stim_train)
+feature_val = fm.predict(stim_val)
 
 # Define response model
 rm = KernelRidgeRegression()
     
 # Train response model
-rm.fit(feature, response)
+rm.fit(feature_train, V1resp_train)
 
 # Simulate response model
-response_hat = rm.predict(feature);
+V1resp_val_hat = rm.predict(feature_val);
 
 # Analyze encoding performance
 
@@ -52,7 +66,7 @@ def corr2_coeff(A,B):
     return np.dot(A_mA,B_mB.T)/np.sqrt(np.dot(ssA[:,None],ssB[None]))
 
 # Get prediction / ground truth voxel correlations
-R = np.diagonal(corr2_coeff(response.T,response_hat.T))
+R = np.diagonal(corr2_coeff(V1resp_val.T,V1resp_val_hat.T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
 # Plot encoding performance Pyplot 
@@ -62,13 +76,13 @@ fig.suptitle('encoding performance')
 plt.xlabel('voxel')
 yLab=plt.ylabel('R')
 yLab.set_rotation(0)
-plt.ylim(0, 1)
+plt.ylim(-1, 1)
 plt.xscale('log')
 
 ## Plot encoding performance Bokeh (Nicer but may require $ pip install bokeh)
 #from bokeh.plotting import figure, output_file, show
 #output_file("encoding_performance.html", title="encoding performance")
 #p = figure(title="econding performance", x_axis_label='voxel', 
-#            y_range=[0, 1], y_axis_label='R', x_axis_type="log", x_range=[1, len(R)])
+#            y_range=[-1, 1], y_axis_label='R', x_axis_type="log", x_range=[1, len(R)])
 #p.line(np.arange(len(R))+1,sorted(R, reverse=True), line_width=2)
 #show(p)
