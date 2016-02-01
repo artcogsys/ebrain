@@ -2,8 +2,10 @@
 # Fore more info see:
 # http://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html
 
+from response_models.ResponseModel import ResponseModel
 from sklearn.kernel_ridge import KernelRidge
-class KernelRidgeRegression(object):
+
+class KernelRidgeRegression(ResponseModel):
 
     def __init__(self):  #Define model
         alpha_=1.0
