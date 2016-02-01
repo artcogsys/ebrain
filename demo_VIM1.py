@@ -4,12 +4,15 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import pearsonr
+import scipy.io
 
 # Import models
-from feature_models.FeatureModel import FeatureModel
+
 from feature_models.Identity import Identity
 from response_models.KernelRidgeRegression import KernelRidgeRegression
+
+# Import data
+stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat')
 
 #Generate stimulus response pairs
 n_samples, n_features, n_voxels = 100, 20, 100

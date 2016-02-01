@@ -4,10 +4,10 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.stats import pearsonr
+
 
 # Import models
-from feature_models.FeatureModel import FeatureModel
+
 from feature_models.Identity import Identity
 from response_models.KernelRidgeRegression import KernelRidgeRegression
 
