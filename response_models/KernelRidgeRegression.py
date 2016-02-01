@@ -8,14 +8,15 @@ from sklearn.kernel_ridge import KernelRidge
 class KernelRidgeRegression(ResponseModel):
 
     def __init__(self):  #Define model
-        alpha_=1.0
-        coef0_=1
-        degree_=3
-        gamma_=None
-        kernel_='linear'
-        kernel_params_=None
-        self.model = KernelRidge(alpha=alpha_, coef0=coef0_, degree=degree_, 
-               gamma=gamma_,kernel=kernel_, kernel_params=kernel_params_)
+        self.alpha_=1.0
+        self.coef0_=1
+        self.degree_=3
+        self.gamma_=None
+        self.kernel_='linear'
+        self.kernel_params_=None
+        self.model = KernelRidge(alpha=self.alpha_,coef0=self.coef0_, 
+                                 degree=self.degree_,gamma=self.gamma_,
+                                 kernel=self.kernel_,kernel_params=self.kernel_params_)
                       
     def fit(self,X,Y): #Fit model
         self.model.fit(X, Y) 

@@ -12,7 +12,8 @@ from feature_models.Identity import Identity
 from response_models.KernelRidgeRegression import KernelRidgeRegression
 
 # Import data from the VIM-1 dataset, ROI=V1
-# See https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
+# Dataset available from https://crcns.org/data-sets
+# Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
 EstimatedResponses = tables.open_file('/home/ed/Documents/Code/ebrain/Data/EstimatedResponses.mat')
 Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat',struct_as_record=True)
 data_train = EstimatedResponses.get_node('/dataTrnS1')[:]
@@ -22,9 +23,9 @@ V1idx = np.nonzero(ROI==1)[0]
 V1resp_train = data_train[:,V1idx]
 V1resp_val = data_val[:,V1idx]
 stim_train = Stimuli["stimTrn"]
-stim_train = np.reshape(stim_train,[1750,128*128])
+stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]])
 stim_val = Stimuli["stimVal"]
-stim_val = np.reshape(stim_val,[120,128*128])
+stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]])
 
 # Select n random voxels for demo
 n_vox=10
