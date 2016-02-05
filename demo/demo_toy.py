@@ -2,42 +2,37 @@
 # feature_model = Identity
 # response_model = KernelRidgeRegression
 
+
+
+#Set your ebrain base directory ***
+import os
+os.chdir('/home/ed/Documents/Code/ebrain')
+
 import numpy as np
 from matplotlib import pyplot as plt
+from encoding_model.EncodingModel import EncodingModel
 
 
-# Import models
-
-from feature_models.Identity import Identity
-from response_models.KernelRidgeRegression import KernelRidgeRegression
-from response_models.RidgeRegressionCV import RidgeRegressionCV
-
-#Generate stimulus response pairs
+# Generate stimulus response pairs
 n_samples, n_features, n_voxels = 100, 20, 100
 rng = np.random.RandomState(0)
 stimulus = rng.randn(n_samples, n_features) 
 response = rng.randn(n_samples,n_voxels) 
 
-# Define feature model
-fm = Identity()
 
-# Train feature model
-fm.fit(stimulus)
+# Encoding model
+em=EncodingModel()
 
-# Simulate feature model
-feature = fm.predict(stimulus)
+# Fit and predict features
+em.fit_feature_model(stimulus)
+feature = em.predict_feature_model(stimulus)
 
-# Define response model
-rm = RidgeRegressionCV()
-    
-# Train response model
-rm.fit(feature, response)
+# Fit and predict response
+em.fit_response_model(feature,response)
+response_hat = em.predict_response_model(feature)
 
-# Simulate response model
-response_hat = rm.predict(feature);
 
 # Analyze encoding performance
-
 # Row-wise Correlation Coefficient calculation for two 2D arrays:
 def corr2_coeff(A,B):
     # Rowwise mean of input arrays & subtract from input arrays themeselves
@@ -52,6 +47,7 @@ def corr2_coeff(A,B):
 # Get prediction / ground truth voxel correlations
 R = np.diagonal(corr2_coeff(response.T,response_hat.T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
+
 
 # Plot encoding performance Pyplot 
 fig = plt.figure()

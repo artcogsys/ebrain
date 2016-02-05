@@ -1,16 +1,15 @@
-# Encoding model demo 
-# feature_model = Identity
-# response_model = KernelRidgeRegression
+# Encoding model demo using the VIM-1 dataset
+
+#Set your ebrain base directory ***
+import os
+os.chdir('/home/ed/Documents/Code/ebrain')
 
 import numpy as np
+from encoding_model.EncodingModel import EncodingModel
 from matplotlib import pyplot as plt
 import tables
 import scipy.io
 
-# Import models
-from feature_models.Identity import Identity
-from response_models.KernelRidgeRegression import KernelRidgeRegression
-from response_models.RidgeRegressionCV import RidgeRegressionCV
 
 # Import data from the VIM-1 dataset, ROI=V1
 # Dataset available from https://crcns.org/data-sets
@@ -35,24 +34,19 @@ target_vox=np.random.randint(len(V1idx), size=n_vox)
 V1resp_train=V1resp_train[:,target_vox]
 V1resp_val=V1resp_val[:,target_vox]
 
-# Define feature model
-fm = Identity()
 
-# Train feature model
-fm.fit(stim_train)
+# Encoding model
+em=EncodingModel()
 
-# Simulate feature model
-feature_train = fm.predict(stim_train)
-feature_val = fm.predict(stim_val)
+# Fit and predict features
+em.fit_feature_model(stim_train)
+feature_train=em.predict_feature_model(stim_train)
+feature_val=em.predict_feature_model(stim_val)
 
-# Define response model
-rm = RidgeRegressionCV()
-    
-# Train response model
-rm.fit(feature_train, V1resp_train)
+# Fit and predict response
+em.fit_response_model(feature_train,V1resp_train)
+V1resp_val_hat = em.predict_response_model(feature_val)
 
-# Simulate response model
-V1resp_val_hat = rm.predict(feature_val);
 
 # Analyze encoding performance
 
