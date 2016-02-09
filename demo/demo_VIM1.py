@@ -11,7 +11,7 @@ import tables
 import scipy.io
 
 
-# Import data from the VIM-1 dataset, ROI=V1
+# Import data from the VIM-1 dataset, ROI=V1 (region of interest)
 # Dataset available from https://crcns.org/data-sets
 # Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
 EstimatedResponses = tables.open_file('/home/ed/Documents/Code/ebrain/Data/EstimatedResponses.mat')
@@ -19,7 +19,7 @@ Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat',str
 data_train = EstimatedResponses.get_node('/dataTrnS1')[:]
 data_val = EstimatedResponses.get_node('/dataValS1')[:]
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
-V1idx = np.nonzero(ROI==1)[0]
+V1idx = np.nonzero(ROI==1)[0] #ROI 
 V1resp_train = data_train[:,V1idx]
 V1resp_val = data_val[:,V1idx]
 stim_train = Stimuli["stimTrn"]
