@@ -4,8 +4,8 @@ import warnings
 
 
 def ind2sub(array_shape, ind):
-    ind[ind < 0] = -1
-    ind[ind >= array_shape[0]*array_shape[1]] = -1
+    ind[np.asarray(ind < 0)] = -1
+    ind[np.asarray(ind >= array_shape[0]*array_shape[1])] = -1
     rows = (ind.astype('int') / array_shape[1])
     cols = ind % array_shape[1]
     return (rows, cols)
@@ -38,7 +38,8 @@ def get_lambda(K,n):
                 warnings.warn("GET_LAMBDA did not converge.")
                 break
             
-    return lam+0.001 #Prevents singularness. ask Umut 
+
+    return lam+0.000001 #Prevents singularness. ask Umut 
             
 
 def get_R_and_lambda(K,Y,k,n):
@@ -71,3 +72,18 @@ def get_R_and_lambda(K,Y,k,n):
             np.multiply(np.sqrt(np.sum(C_1**2,axis=0)), np.sqrt(np.sum(C_2**2,axis=0)))) 
 
     return (R,lam)
+
+def get_BETA_hat(K, X, Y, lambda_hat):
+
+    C        = np.unique(lambda_hat)
+    d        = Y.shape 
+    BETA_hat = np.full([d[0],d[1]],np.nan)  
+    I        = np.eye(d[0])
+
+    for i in range(0,len(C)):    
+        BETA_hat[:,np.squeeze(lambda_hat==C[i])] = np.linalg.solve ( K + np.dot(C[i], I)  ,  Y[:, np.squeeze(lambda_hat==C[i])])
+
+    BETA_hat = np.dot(X.T,BETA_hat)   
+
+
+    return BETA_hat
