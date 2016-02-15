@@ -62,7 +62,7 @@ def corr2_coeff(A,B):
     return np.dot(A_mA,B_mB.T)/np.sqrt(np.dot(ssA[:,None],ssB[None]))
 
 # Get prediction / ground truth voxel correlations
-R = np.diagonal(corr2_coeff(V1resp_val.T,V1resp_val_hat.T))
+R = np.diagonal(corr2_coeff(V1resp_val.T,V1resp_val_hat[0].T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
 # Plot encoding performance Pyplot 

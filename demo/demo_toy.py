@@ -2,8 +2,6 @@
 # feature_model = Identity
 # response_model = KernelRidgeRegression
 
-
-
 #Set your ebrain base directory ***
 import os
 os.chdir('/home/ed/Documents/Code/ebrain')
@@ -12,13 +10,11 @@ import numpy as np
 from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
 
-
 # Generate stimulus response pairs
-n_samples, n_features, n_voxels = 100, 20, 100
+n_samples, n_features, n_voxels = 200, 20, 100
 rng = np.random.RandomState(0)
 stimulus = rng.randn(n_samples, n_features) 
 response = rng.randn(n_samples,n_voxels) 
-
 
 # Encoding model
 em=EncodingModel()
@@ -45,7 +41,7 @@ def corr2_coeff(A,B):
     return np.dot(A_mA,B_mB.T)/np.sqrt(np.dot(ssA[:,None],ssB[None]))
 
 # Get prediction / ground truth voxel correlations
-R = np.diagonal(corr2_coeff(response.T,response_hat.T))
+R = np.diagonal(corr2_coeff(response.T,response_hat[0].T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
 

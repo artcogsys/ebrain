@@ -1,25 +1,17 @@
-# Kernal ridge regression - response model
-# Fore more info see:
-# http://scikit-learn.org/stable/modules/generated/sklearn.kernel_ridge.KernelRidge.html
-
 from response_models.ResponseModel import ResponseModel
-from sklearn.kernel_ridge import KernelRidge
+from external.KernelRidge import KERNEL_RIDGE_REGRESSION
 
 class KernelRidgeRegression(ResponseModel):
-
-    def __init__(self):  #Define model
-        self.alpha_=1.0
-        self.coef0_=1
-        self.degree_=3
-        self.gamma_=None
-        self.kernel_='linear'
-        self.kernel_params_=None
-        self.model = KernelRidge(alpha=self.alpha_,coef0=self.coef0_, 
-                                 degree=self.degree_,gamma=self.gamma_,
-                                 kernel=self.kernel_,kernel_params=self.kernel_params_)
-                      
-    def fit(self,X,Y): #Fit model
-        self.model.fit(X, Y) 
-
-    def predict(self,X): # Return predictions 
+    
+    def __init__(self):
+        alpha=1
+        n=3
+        k=10
+        self.model=KERNEL_RIDGE_REGRESSION(alpha,k,n)
+          
+    def fit(self,X,Y):
+        self.model.fit(X,Y)
+            
+    def predict(self,X):
         return self.model.predict(X)
+            
