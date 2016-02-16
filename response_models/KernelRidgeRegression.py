@@ -5,8 +5,8 @@ class KernelRidgeRegression(ResponseModel):
     
     def __init__(self):
         alpha=2.5e-4
-        n=3
-        k=10
+        n=10
+        k=3
         self.model=KERNEL_RIDGE_REGRESSION(alpha,k,n)
           
     def fit(self,X,Y):

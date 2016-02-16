@@ -1,6 +1,7 @@
 import numpy as np
 import time
 import warnings
+import math
 
 
 def ind2sub(array_shape, ind):
@@ -11,19 +12,19 @@ def ind2sub(array_shape, ind):
     return (rows, cols)
 
 def get_lambda(K,n): 
-    _,s,_ = np.linalg.svd(K,full_matrices=False)
+    s= np.linalg.svd(K,compute_uv=False)
     s = s[s>0]
     lam = np.full([n],np.nan)
     L = len(s)
     df = np.linspace(L, 1, n)
-    M = np.mean(1./s)
-    f = lambda df,lam: df-np.sum(s/(s+lam))
-    f_prime = lambda lam: np.sum(s/(s+lam)**2)
-    
+    M = np.mean(1.0/s)
+    f = lambda df,lam: df-np.sum(  np.divide (s,(s+lam) )   )
+    f_prime = lambda lam: np.sum(   np.divide(    s,np.square(s+lam)    )     )
+
     for i in range(0,n):
         
         if i==0:
-            lam[i]=1
+            lam[i]=0
         else:
             lam[i]=lam[i-1]
             
@@ -39,27 +40,27 @@ def get_lambda(K,n):
                 break
             
 
-    return lam+0.00000001 #Prevents singularness. ask Umut 
+    return lam+0.00001 #Prevents singularness. ask Umut 
             
 
 def get_R_and_lambda(K,Y,k,n):
     d = Y.shape
     folds = list(xrange(k))
-    Indices = np.kron(np.ones((d[0] + k // 2) // k),folds)
+    Indices = np.kron(np.ones( math.ceil(float(d[0])/k)),folds)
     Indices = np.sort(Indices[:d[0]])
     lam = get_lambda(K,n)
     Y_hat = np.full([d[0],d[1],n],np.nan)
 
     for i in range(0,k):
         Train = (Indices<>i)
-        S = sum(Train)
+        S = np.sum(Train)
         N = np.full([S,d[1],n],np.nan)
         I = np.eye(S)
         Test = (Indices==i)
         foo = K[Train,Train]
         bar = Y[Train,:]
         for ii in range(0,n):
-            N[:,:,ii]=np.linalg.solve( (foo+lam[ii]*I) , bar )
+            N[:,:,ii]=np.linalg.solve( foo+np.multiply(lam[ii],I) , bar )
 
         Y_hat[Test, :, :] = np.reshape( np.dot(K[np.ix_(Test,Train)], np.reshape(N, (S, d[1] * n))) , (sum(Test), d[1], n ))
 
@@ -68,8 +69,7 @@ def get_R_and_lambda(K,Y,k,n):
     for i in range(0,n):
             C_1 = Y-np.mean(Y,axis=0)
             C_2 = Y_hat[:,:,i] - np.mean(Y_hat[:,:,i],axis=0)
-            R[:,i] = np.divide(np.sum(np.multiply(C_1,C_2),axis=0) , \
-            np.multiply(np.sqrt(np.sum(C_1**2,axis=0)), np.sqrt(np.sum(C_2**2,axis=0)))) 
+            R[:,i] = np.divide(np.sum(np.multiply(C_1,C_2),axis=0) , np.multiply(np.sqrt(np.sum(C_1**2,axis=0)), np.sqrt(np.sum(C_2**2,axis=0)))) 
 
     return (R,lam)
 

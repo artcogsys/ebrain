@@ -42,7 +42,8 @@ class KERNEL_RIDGE_REGRESSION(object):
             X[i] = stats.mstats.zscore(X[i], axis=0)
             X[i][np.isnan(X[i])] = 0  #Correct for division by zero
             K[i] = np.dot(X[i],X[i].T)
-            R[:, :, i], LAMBDA[:, i] = get_R_and_lambda(K[i], Y, k, n);
+            R[:, :, i], LAMBDA[:, i] = get_R_and_lambda(K[i], Y, k, n)
+         
     
             r_hat      = np.full([d[1], 1],np.nan)      
             lambda_hat = np.full([d[1], 1],np.nan)    
@@ -57,15 +58,11 @@ class KERNEL_RIDGE_REGRESSION(object):
     
             lambda_hat[i] = LAMBDA[I, J];
             X_hat[i]      = J;
-    
+            BETA_hat = [0]*d[1]  
 
-            BETA_hat = [0]*L  
+           
+            H_0 = 1- t.cdf(r_hat.astype('float64') * np.sqrt((d[0] - 2) / (1 - r_hat.astype('float64')** 2)), d[0] - 2) >= alpha;
 
-            H_0=1-t.cdf(np.multiply((r_hat),np.sqrt( np.divide ((d[0]-2), (1-(r_hat)**2)))) , d[0] - 2) >= alpha
-         
-            #    1 - t.cdf(   (r_hat) * np.sqrt(  (d[0] - 2)   /  (1 - (r_hat)**2)   )       ,         d(1) - 2      ) >= alpha;
-                
-#= 1 - tcdf(double(r_hat) .* sqrt((d(1) - 2) ./ (1 - double(r_hat) .^ 2)), d(1) - 2) >= alpha
 
 
             X_hat[H_0]      = np.nan;
@@ -103,7 +100,6 @@ class KERNEL_RIDGE_REGRESSION(object):
             print "PREDICT_LINEAR_KERNEL_RIDGE_REGRESSION: %d / %d" % (i+1,L)
             X[i]=(X[i]-MU[i])/SIGMA[i]
             X[i][np.isnan(X[i])] = 0
-           # print(X[i])
             Y_hat[i] = np.dot(X[i],BETA_hat[i]) 
         return Y_hat
 
