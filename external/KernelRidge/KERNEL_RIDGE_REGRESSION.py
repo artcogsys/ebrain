@@ -9,9 +9,6 @@ from utils import get_BETA_hat
 
 class KERNEL_RIDGE_REGRESSION(object):
 
-#X=[np.random.randn(2000,300).astype(float)]
-
-#Y=  np.random.randn(2000,30)
     def __init__(self,alpha,k,n):
         self.alpha=alpha
         self.k=k
@@ -64,7 +61,12 @@ class KERNEL_RIDGE_REGRESSION(object):
 
             BETA_hat = [0]*L  
 
-            H_0=1-t.cdf(np.divide((r_hat),np.sqrt( np.divide ((d[0]-2), (1-(r_hat)**2)))) , d[0] - 2)>= alpha
+            H_0=1-t.cdf(np.multiply((r_hat),np.sqrt( np.divide ((d[0]-2), (1-(r_hat)**2)))) , d[0] - 2) >= alpha
+         
+            #    1 - t.cdf(   (r_hat) * np.sqrt(  (d[0] - 2)   /  (1 - (r_hat)**2)   )       ,         d(1) - 2      ) >= alpha;
+                
+#= 1 - tcdf(double(r_hat) .* sqrt((d(1) - 2) ./ (1 - double(r_hat) .^ 2)), d(1) - 2) >= alpha
+
 
             X_hat[H_0]      = np.nan;
             lambda_hat[H_0] = np.nan;
@@ -101,6 +103,7 @@ class KERNEL_RIDGE_REGRESSION(object):
             print "PREDICT_LINEAR_KERNEL_RIDGE_REGRESSION: %d / %d" % (i+1,L)
             X[i]=(X[i]-MU[i])/SIGMA[i]
             X[i][np.isnan(X[i])] = 0
+           # print(X[i])
             Y_hat[i] = np.dot(X[i],BETA_hat[i]) 
         return Y_hat
 

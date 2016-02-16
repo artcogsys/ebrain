@@ -39,7 +39,7 @@ def get_lambda(K,n):
                 break
             
 
-    return lam+0.000001 #Prevents singularness. ask Umut 
+    return lam+0.00000001 #Prevents singularness. ask Umut 
             
 
 def get_R_and_lambda(K,Y,k,n):

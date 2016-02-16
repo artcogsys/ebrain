@@ -11,10 +11,10 @@ from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
 
 # Generate stimulus response pairs
-n_samples, n_features, n_voxels = 200, 20, 100
+n_samples, n_features, n_voxels = 20, 100, 5
 rng = np.random.RandomState(0)
-stimulus = rng.randn(n_samples, n_features) 
-response = rng.randn(n_samples,n_voxels) 
+stimulus = rng.randn(n_samples, n_features) +10
+response = rng.randn(n_samples,n_voxels) +10
 
 # Encoding model
 em=EncodingModel()

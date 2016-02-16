@@ -20,15 +20,21 @@ data_train = EstimatedResponses.get_node('/dataTrnS1')[:]
 data_val = EstimatedResponses.get_node('/dataValS1')[:]
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
 V1idx = np.nonzero(ROI==1)[0] #ROI 
+
 V1resp_train = data_train[:,V1idx]
+V1resp_train[np.isnan(V1resp_train)] = 0 #remove nan
+
 V1resp_val = data_val[:,V1idx]
+V1resp_val[np.isnan(V1resp_val)] = 0  #remove nan
+
+
 stim_train = Stimuli["stimTrn"]
 stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]])
 stim_val = Stimuli["stimVal"]
 stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]])
 
-# Select n random voxels for demo
-n_vox=10
+# Select n random voxels for demo set to 
+n_vox=V1resp_train.shape[1]   #set to 'V1resp_train.shape[1]' for all
 np.random.seed(0)
 target_vox=np.random.randint(len(V1idx), size=n_vox)
 V1resp_train=V1resp_train[:,target_vox]
@@ -47,6 +53,10 @@ feature_val=em.predict_feature_model(stim_val)
 em.fit_response_model(feature_train,V1resp_train)
 V1resp_val_hat = em.predict_response_model(feature_val)
 
+# Remove insignificant voxels
+significant_vox=em.rm.model.H_0==False
+V1resp_val=V1resp_val[:,np.squeeze(significant_vox)]
+
 
 # Analyze encoding performance
 
@@ -63,17 +73,26 @@ def corr2_coeff(A,B):
 
 # Get prediction / ground truth voxel correlations
 R = np.diagonal(corr2_coeff(V1resp_val.T,V1resp_val_hat[0].T))
-print 'encoding performance: ',np.mean(R),' (mean R)'
 
-# Plot encoding performance Pyplot 
-fig = plt.figure()
-plt.plot(np.arange(len(R))+1,sorted(R, reverse=True))
-fig.suptitle('encoding performance')
-plt.xlabel('voxel')
-yLab=plt.ylabel('R')
-yLab.set_rotation(0)
-plt.ylim(-1, 1)
-plt.xscale('log')
+if V1resp_val_hat[0].shape[1]==0:
+    print 'No responses can be predicted at this alpha setting'
+else:
+    print 'encoding performance: ',np.mean(R),' (mean R)'
+    # Plot encoding performance Pyplot 
+    fig = plt.figure()
+    plt.plot(np.arange(len(R))+1,sorted(R, reverse=True))
+    fig.suptitle('encoding performance')
+    plt.xlabel('voxel')
+    yLab=plt.ylabel('R')
+    yLab.set_rotation(0)
+    plt.ylim(-1, 1)
+    plt.xscale('log')
+    
+acc=0
+for i in range(0,1750):
+    p=np.argmax (corr2_coeff (np.expand_dims(V1resp_train_hat[0][i,:],axis=1).T ,  V1resp_train  ))
+    acc=acc+(p==(i))
+
 
 ## Plot encoding performance Bokeh (Nicer but may require $ pip install bokeh)
 #from bokeh.plotting import figure, output_file, show

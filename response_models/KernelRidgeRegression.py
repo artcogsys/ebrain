@@ -4,7 +4,7 @@ from external.KernelRidge import KERNEL_RIDGE_REGRESSION
 class KernelRidgeRegression(ResponseModel):
     
     def __init__(self):
-        alpha=1
+        alpha=2.5e-4
         n=3
         k=10
         self.model=KERNEL_RIDGE_REGRESSION(alpha,k,n)
