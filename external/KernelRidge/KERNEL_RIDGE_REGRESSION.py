@@ -52,7 +52,7 @@ class KERNEL_RIDGE_REGRESSION(object):
 
         for i in range(0,d[1]):
             print "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): %d / %d" % (i+1,d[1])
-            r_hat[i] = np.amax( np.reshape(R,(d[1],n*L))[i,:] )
+            r_hat[i] = np.amax( np.reshape(R,(d[1],n*L))[i,:])
             I = np.argmax( np.reshape(R,(d[1],n*L))[i,:] )
             I,J = ind2sub((n, L), np.asarray(I))
     
@@ -61,7 +61,7 @@ class KERNEL_RIDGE_REGRESSION(object):
             BETA_hat = [0]*d[1]  
 
            
-            H_0 = 1- t.cdf(r_hat.astype('float64') * np.sqrt((d[0] - 2) / (1 - r_hat.astype('float64')** 2)), d[0] - 2) >= alpha;
+            H_0 = 1- t.cdf(r_hat * np.sqrt((d[0] - 2) / (1 - r_hat** 2)), d[0] - 2) >= alpha;
 
 
 
@@ -102,4 +102,3 @@ class KERNEL_RIDGE_REGRESSION(object):
             X[i][np.isnan(X[i])] = 0
             Y_hat[i] = np.dot(X[i],BETA_hat[i]) 
         return Y_hat
-

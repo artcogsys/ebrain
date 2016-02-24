@@ -40,7 +40,7 @@ def get_lambda(K,n):
                 break
             
 
-    return lam+0.00001 #Prevents singularness. ask Umut 
+    return lam+0.0001 #Prevents singularness. ask Umut 
             
 
 def get_R_and_lambda(K,Y,k,n):
@@ -57,7 +57,7 @@ def get_R_and_lambda(K,Y,k,n):
         N = np.full([S,d[1],n],np.nan)
         I = np.eye(S)
         Test = (Indices==i)
-        foo = K[Train,Train]
+        foo = K[np.ix_(Train,Train)] 
         bar = Y[Train,:]
         for ii in range(0,n):
             N[:,:,ii]=np.linalg.solve( foo+np.multiply(lam[ii],I) , bar )
@@ -81,7 +81,7 @@ def get_BETA_hat(K, X, Y, lambda_hat):
     I        = np.eye(d[0])
 
     for i in range(0,len(C)):    
-        BETA_hat[:,np.squeeze(lambda_hat==C[i])] = np.linalg.solve ( K + np.dot(C[i], I)  ,  Y[:, np.squeeze(lambda_hat==C[i])])
+        BETA_hat[:,np.squeeze(lambda_hat==C[i])] = np.linalg.solve ( K + C[i]* I  ,  Y[:, np.squeeze(lambda_hat==C[i])])
 
     BETA_hat = np.dot(X.T,BETA_hat)   
 

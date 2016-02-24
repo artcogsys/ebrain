@@ -16,8 +16,8 @@ import scipy.io
 # Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
 EstimatedResponses = tables.open_file('/home/ed/Documents/Code/ebrain/Data/EstimatedResponses.mat')
 Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/ebrain/Data/Stimuli.mat',struct_as_record=True)
-data_train = EstimatedResponses.get_node('/dataTrnS1')[:]
-data_val = EstimatedResponses.get_node('/dataValS1')[:]
+data_train = EstimatedResponses.get_node('/dataTrnS1')[:].astype('float64')
+data_val = EstimatedResponses.get_node('/dataValS1')[:].astype('float64')
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
 V1idx = np.nonzero(ROI==1)[0] #ROI 
 
@@ -27,14 +27,14 @@ V1resp_val = data_val[:,V1idx]
 mask = (np.nan_to_num(V1resp_val) != 0 ).all(axis=0) | (np.nan_to_num(V1resp_train) != 0 ).all(axis=0)
 V1resp_train=V1resp_train[:,mask]
 V1resp_val=V1resp_val[:,mask]
-V1resp_train[np.isnan(V1resp_train)] = 0 #nan to zero
-V1resp_val[np.isnan(V1resp_val)] = 0
+#V1resp_train[np.isnan(V1resp_train)] = 0 #nan to zero
+#V1resp_val[np.isnan(V1resp_val)] = 0
 
 
 stim_train = Stimuli["stimTrn"]
-stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]])
+stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]],order="F")
 stim_val = Stimuli["stimVal"]
-stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]])
+stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]],order="F")
 
 # Select n random voxels for demo set to 
 #n_vox=V1resp_train.shape[1]   #set to 'V1resp_train.shape[1]' for all
@@ -51,6 +51,8 @@ em=EncodingModel()
 em.fit_feature_model(stim_train.astype('float64'))
 feature_train=em.predict_feature_model(stim_train.astype('float64'))
 feature_val=em.predict_feature_model(stim_val.astype('float64'))
+feature_train=stim_train.astype('float64')
+feature_val=stim_val.astype('float64')
 
 # Fit and predict response
 em.fit_response_model(feature_train.astype('float64'),V1resp_train.astype('float64'))
