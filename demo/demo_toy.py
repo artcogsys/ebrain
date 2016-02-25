@@ -4,28 +4,30 @@
 
 #Set your ebrain base directory ***
 import os
-os.chdir('/home/ed/Documents/Code/ebrain')
+os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
 
 import numpy as np
 from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
 
 # Generate stimulus response pairs
-n_samples, n_features, n_voxels = 20, 100, 5
+n_samples, n_features, n_voxels = 90, 100, 5
 rng = np.random.RandomState(0)
-stimulus = rng.randn(n_samples, n_features) +10
-response = rng.randn(n_samples,n_voxels) +10
+real_weights = np.random.randn(n_features,n_voxels)
+stim_train = rng.randn(n_samples, n_features) 
+resp_train = np.dot(stim_train,real_weights)
+stim_test = rng.randn(n_samples, n_features) 
+resp_test = np.dot(stim_test,real_weights)
+
 
 # Encoding model
 em=EncodingModel()
 
-# Fit and predict features
-em.fit_feature_model(stimulus)
-feature = em.predict_feature_model(stimulus)
+# Fit encoding model
+em.fit(stim_train,resp_train)
 
-# Fit and predict response
-em.fit_response_model(feature,response)
-response_hat = em.predict_response_model(feature)
+# Predict encoding model
+resp_test_hat = em.predict(stim_test)
 
 
 # Analyze encoding performance
@@ -41,7 +43,7 @@ def corr2_coeff(A,B):
     return np.dot(A_mA,B_mB.T)/np.sqrt(np.dot(ssA[:,None],ssB[None]))
 
 # Get prediction / ground truth voxel correlations
-R = np.diagonal(corr2_coeff(response.T,response_hat[0].T))
+R = np.diagonal(corr2_coeff(resp_test.T,resp_test_hat[0].T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
 

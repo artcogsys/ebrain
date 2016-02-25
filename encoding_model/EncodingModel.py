@@ -11,19 +11,17 @@ class EncodingModel(object):
         self.fm = Identity()
         self.rm = KernelRidgeRegression()
     
-    # Train feature model
-    def fit_feature_model(self,stimulus):
-        self.fm.fit(stimulus)
+    # Train encoding model
+    def fit(self,stimulus,response):
+        self.fm.fit(stimulus) #Fit feature model
+        self.train_feature=self.fm.predict(stimulus) #Predict train features
+        self.rm.fit(self.train_feature,response) #Fit response model
 
-    # Return feature model predictions
-    def predict_feature_model(self,stimulus):
-        return self.fm.predict(stimulus)
-
-    # Train response model
-    def fit_response_model(self,feature,response):
-        self.rm.fit(feature,response)
+    # Predict encoding model
+    def predict(self,stimulus):  
+        self.test_feature=self.fm.predict(stimulus) #Predict test features
+        return self.rm.predict(self.test_feature); #Predict test response
         
-    # Return response model predictions
-    def predict_response_model(self,feature):
-        return self.rm.predict(feature);
+
+        
     
