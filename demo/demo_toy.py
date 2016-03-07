@@ -13,7 +13,7 @@ from encoding_model.EncodingModel import EncodingModel
 # Generate stimulus response pairs
 n_samples, n_features, n_voxels = 90, 100, 5
 rng = np.random.RandomState(0)
-real_weights = np.random.randn(n_features,n_voxels)
+real_weights = rng.randn(n_features,n_voxels)
 stim_train = rng.randn(n_samples, n_features) 
 resp_train = np.dot(stim_train,real_weights)
 stim_test = rng.randn(n_samples, n_features) 

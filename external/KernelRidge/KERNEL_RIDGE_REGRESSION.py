@@ -59,11 +59,8 @@ class KERNEL_RIDGE_REGRESSION(object):
             lambda_hat[i] = LAMBDA[I, J];
             X_hat[i]      = J;
             BETA_hat = [0]*d[1]  
-
-           
-            H_0 = 1- t.cdf(r_hat * np.sqrt((d[0] - 2) / (1 - r_hat** 2)), d[0] - 2) >= alpha;
-
-
+            
+            H_0 = 1.0 - t.cdf(r_hat * np.sqrt((d[0] - 2.0) / (1.0 - r_hat** 2.0)), d[0] - 2.0) >= alpha;
 
             X_hat[H_0]      = np.nan;
             lambda_hat[H_0] = np.nan;
