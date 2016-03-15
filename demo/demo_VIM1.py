@@ -1,8 +1,8 @@
 # Encoding model demo using the VIM-1 dataset
 
-#Set your ebrain base directory ***
-import os
-os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
+#Set base directory of your Python modules not contained in standard module path (i.e. directory where ebrain is): 
+import os, sys
+sys.path.append('/home/ed/Documents/Code/PYTHON/')
 
 import numpy as np
 from encoding_model.EncodingModel import EncodingModel
