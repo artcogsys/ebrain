@@ -7,7 +7,8 @@ from response_models.KernelRidgeRegression import KernelRidgeRegression
 class EncodingModel(object):
     
     # Select feature and response models ***
-    def __init__(self, fm=Identity(), rm=KernelRidgeRegression()):
+    def __init__(self, fm, rm):
+        # default to: fm=Identity(), rm=KernelRidgeRegression()
         self.fm = fm
         self.rm = rm
     

@@ -7,13 +7,12 @@ from utils import get_R_and_lambda
 from utils import get_BETA_hat
 
 
-class KERNEL_RIDGE_REGRESSION(object):
+class KERNEL_RIDGE_REGRESSION_obj(object):
 
     def __init__(self,alpha,k,n):
         self.alpha=alpha
         self.k=k
         self.n=n
-    
     
     def fit(self,X,Y):
         alpha=self.alpha
