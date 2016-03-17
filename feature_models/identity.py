@@ -4,7 +4,7 @@
 # will provide a way to access them, e.g. by loading preexisting features or by 
 # passing the input stimuli through a pretrained model. 
 
-from feature_models.FeatureModel import FeatureModel
+from feature_models.feature_model import FeatureModel
 
 class Identity(FeatureModel):
         

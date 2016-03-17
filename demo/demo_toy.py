@@ -2,11 +2,9 @@
 # feature_model = Identity
 # response_model = KernelRidgeRegression
 
-import os, sys
-
-#Set base directory of your Python modules not contained in standard module path (i.e. directory where ebrain is): 
-sys.path.append('/home/ed/Documents/Code/PYTHON/')
-
+#Set your ebrain base directory ***
+import os
+os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
 
 import numpy as np
 from matplotlib import pyplot as plt

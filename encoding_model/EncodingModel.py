@@ -1,26 +1,25 @@
 # Encoding model class
 
 # Import required feature and response models ***
-from feature_models.Identity import Identity
-from response_models.KernelRidgeRegression import KernelRidgeRegression
+from feature_models.identity import Identity
+from response_models.kernel_ridge_regression import KernelRidgeRegression
 
 class EncodingModel(object):
     
     # Select feature and response models ***
-    def __init__(self, fm, rm):
-        # default to: fm=Identity(), rm=KernelRidgeRegression()
-        self.fm = fm
-        self.rm = rm
+    def __init__(self):
+        self.fm = Identity()
+        self.rm = KernelRidgeRegression()
     
     # Train encoding model
     def fit(self,stimulus,response):
         self.fm.fit(stimulus) #Fit feature model
-        self.train_feature = self.fm.predict(stimulus)  #Predict train features
-        self.rm.fit(self.train_feature, response) #Fit response model
+        self.train_feature=self.fm.predict(stimulus) #Predict train features
+        self.rm.fit(self.train_feature,response) #Fit response model
 
     # Predict encoding model
     def predict(self,stimulus):  
-        self.test_feature = self.fm.predict(stimulus) #Predict test features
+        self.test_feature=self.fm.predict(stimulus) #Predict test features
         return self.rm.predict(self.test_feature); #Predict test response
         
 
