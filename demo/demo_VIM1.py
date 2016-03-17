@@ -2,7 +2,7 @@
 
 #Set your ebrain base directory ***
 import os
-os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
+os.chdir('/home/egrant/ebrain')
 
 import numpy as np
 from encoding_model.EncodingModel import EncodingModel
@@ -14,8 +14,8 @@ import scipy.io
 # Import data from the VIM-1 dataset, ROI=V1 (region of interest)
 # Dataset available from https://crcns.org/data-sets
 # Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
-EstimatedResponses = tables.open_file('/home/ed/Documents/Code/PYTHON/ebrain/Data/EstimatedResponses.mat')
-Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/PYTHON/ebrain/Data/Stimuli.mat',struct_as_record=True)
+EstimatedResponses = tables.open_file('/home/egrant/ebrain/Data/EstimatedResponses.mat')
+Stimuli = scipy.io.loadmat('/home/egrant/ebrain/Data/Stimuli.mat',struct_as_record=True)
 data_train = EstimatedResponses.get_node('/dataTrnS1')[:].astype('float64')
 data_val = EstimatedResponses.get_node('/dataValS1')[:].astype('float64')
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
@@ -52,14 +52,14 @@ V1resp_val_hat=em.predict(stim_val)
 
 
 # Remove insignificant voxels
-significant_vox=em.rm.model.H_0==False
+significant_vox=em.rm.H_0==False
 V1resp_val=V1resp_val[:,np.squeeze(significant_vox)]
 V1resp_train=V1resp_train[:,np.squeeze(significant_vox)]
 
 # Analyze encoding performance
 
 #Get num of significant voxels
-print '\nsigfniciant voxels:',n_vox-np.sum(em.rm.model.H_0),'/', n_vox, 'at alpha =',em.rm.model.alpha
+print '\nsigfniciant voxels:',n_vox-np.sum(em.rm.H_0),'/', n_vox, 'at alpha =',em.rm.alpha
 
 
 # Row-wise Correlation Coefficient calculation for two 2D arrays:
