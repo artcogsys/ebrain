@@ -10,8 +10,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
 
+import numpy as np
+from scipy import misc
+arr = misc.imread('/home/ed/camman.tif').astype('float32')
+arr=arr/255
+arr=np.reshape(arr,(128*128,1))
+
 # Generate stimulus response pairs
-n_samples, n_features, n_voxels = 90, 100, 5
+n_samples, n_features, n_voxels = 90, 128*128, 5
 rng = np.random.RandomState(0)
 real_weights = rng.randn(n_features,n_voxels)
 stim_train = rng.randn(n_samples, n_features) 
@@ -29,7 +35,6 @@ em.fit(stim_train,resp_train)
 # Predict encoding model
 resp_test_hat = em.predict(stim_test)
 
-
 # Analyze encoding performance
 # Row-wise Correlation Coefficient calculation for two 2D arrays:
 def corr2_coeff(A,B):
@@ -46,7 +51,6 @@ def corr2_coeff(A,B):
 R = np.diagonal(corr2_coeff(resp_test.T,resp_test_hat[0].T))
 print 'encoding performance: ',np.mean(R),' (mean R)'
 
-
 # Plot encoding performance Pyplot 
 fig = plt.figure()
 plt.plot(np.arange(len(R))+1,sorted(R, reverse=True))
@@ -57,10 +61,3 @@ yLab.set_rotation(0)
 plt.ylim(-1, 1)
 plt.xscale('log')
 
-## Plot encoding performance Bokeh (Nicer but may require $ pip install bokeh)
-#from bokeh.plotting import figure, output_file, show
-#output_file("encoding_performance.html", title="encoding performance")
-#p = figure(title="econding performance", x_axis_label='voxel', 
-#            y_range=[-1, 1], y_axis_label='R', x_axis_type="log", x_range=[1, len(R)])
-#p.line(np.arange(len(R))+1,sorted(R, reverse=True), line_width=2)
-#show(p)

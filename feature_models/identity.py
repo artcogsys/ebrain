@@ -8,10 +8,10 @@ from feature_models.feature_model import FeatureModel
 
 class Identity(FeatureModel):
         
-    def fit(self,X): #Fit model
+    def fit(self): #Fit model
         pass
     
-    def predict(self,X): #Return predictions
+    def predict(self,X): #Return predictions as in list
         return X
 
  

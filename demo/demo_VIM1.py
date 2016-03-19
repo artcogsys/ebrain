@@ -2,7 +2,7 @@
 
 #Set your ebrain base directory ***
 import os
-os.chdir('/home/egrant/ebrain')
+os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
 
 import numpy as np
 from encoding_model.EncodingModel import EncodingModel
@@ -14,8 +14,8 @@ import scipy.io
 # Import data from the VIM-1 dataset, ROI=V1 (region of interest)
 # Dataset available from https://crcns.org/data-sets
 # Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
-EstimatedResponses = tables.open_file('/home/egrant/ebrain/Data/EstimatedResponses.mat')
-Stimuli = scipy.io.loadmat('/home/egrant/ebrain/Data/Stimuli.mat',struct_as_record=True)
+EstimatedResponses = tables.open_file('/home/ed/Documents/Code/PYTHON/ebrain/Data/EstimatedResponses.mat')
+Stimuli = scipy.io.loadmat('/home/ed/Documents/Code/PYTHON/ebrain/Data/Stimuli.mat',struct_as_record=True)
 data_train = EstimatedResponses.get_node('/dataTrnS1')[:].astype('float64')
 data_val = EstimatedResponses.get_node('/dataValS1')[:].astype('float64')
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
@@ -26,8 +26,9 @@ V1resp_train = data_train[:,V1idx]
 V1resp_val = data_val[:,V1idx]
 mask = (np.nan_to_num(V1resp_val) != 0 ).all(axis=0) | (np.nan_to_num(V1resp_train) != 0 ).all(axis=0)
 V1resp_train=V1resp_train[:,mask]
+V1resp_train[np.isnan(V1resp_train)]=0
 V1resp_val=V1resp_val[:,mask]
-
+V1resp_val[np.isnan(V1resp_val)]=0
 
 stim_train = Stimuli["stimTrn"].astype('float64')
 stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]],order="F")

@@ -11,7 +11,7 @@ from scipy.stats import t
 class KernelRidgeRegression(ResponseModel):
     
     def __init__(self):
-        self.alpha=2.5e-4
+        self.alpha=1#2.5e-4
         self.n=10
         self.k=3
         
@@ -85,7 +85,6 @@ class KernelRidgeRegression(ResponseModel):
         return (R,lam)
     
     def get_BETA_hat(self,K, X, Y, lambda_hat):
-    
         C        = np.unique(lambda_hat)
         d        = Y.shape 
         BETA_hat = np.full([d[0],d[1]],np.nan)  
@@ -151,8 +150,6 @@ class KernelRidgeRegression(ResponseModel):
 
         for i in range(0,L):
             print "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (c / c): %d / %d" % (i+1,L)
-
-    
             BETA_hat[i]= self.get_BETA_hat(K[i], X[i], Y[:, np.squeeze(X_hat == i)], lambda_hat[X_hat == i])
         
         self.BETA_hat =BETA_hat

@@ -7,6 +7,7 @@
 from feature_models.feature_model import FeatureModel
 import numpy as np
 import scipy
+import skimage.transform
 
 class GaborWaveletPyramid(FeatureModel):
     
@@ -59,6 +60,7 @@ class GaborWaveletPyramid(FeatureModel):
         self.G = self.GABOR_WAVELET_PYRAMID(self.b, self.FOV, self.gamma, self.lam, self.sigma, self.theta)
     
     def predict(self,X): #Return predictions  
+        resp=[0]*2
         g=[0]*2
         g[0]=np.reshape(self.G[0],(self.G[0].shape[0],self.G[0].shape[1]))
         g[1]=np.reshape(self.G[1],(g[0].shape))
@@ -69,12 +71,12 @@ class GaborWaveletPyramid(FeatureModel):
         x=np.reshape(X,(X.shape[0]*X.shape[1],X.shape[2]))
         
         #Simple cell responses
-        s=np.dot(g[0],x) 
+        resp[0]=np.dot(g[0],x).T 
         
         #Complex cell responses
-        c=np.sqrt( np.power(np.dot(g[0],x),2) + np.power(np.dot(g[1],x),2))
-        
-        return s,c
+        resp[1]=np.sqrt( np.power(np.dot(g[0],x),2) + np.power(np.dot(g[1],x),2)).T
+
+        return resp
 
 
 
