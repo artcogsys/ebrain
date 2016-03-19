@@ -65,7 +65,7 @@ class GaborWaveletPyramid(FeatureModel):
         g[0]=np.reshape(self.G[0],(self.G[0].shape[0],self.G[0].shape[1]))
         g[1]=np.reshape(self.G[1],(g[0].shape))
         #reshape images for resize, rows=images
-        X=np.reshape(X,(np.sqrt(X.shape[1]),np.sqrt(X.shape[1]),X.shape[0]))
+        X=np.reshape(X.T,(np.sqrt(X.shape[1]),np.sqrt(X.shape[1]),X.shape[0]))
         #resize images      
         X=skimage.transform.resize(X,(len(self.FOV),len(self.FOV)))
         x=np.reshape(X,(X.shape[0]*X.shape[1],X.shape[2]))
