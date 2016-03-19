@@ -11,7 +11,7 @@ from scipy.stats import t
 class KernelRidgeRegression(ResponseModel):
     
     def __init__(self):
-        self.alpha=1#2.5e-4
+        self.alpha=2.5e-4
         self.n=10
         self.k=3
         

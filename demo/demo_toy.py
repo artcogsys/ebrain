@@ -9,15 +9,12 @@ os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
 import numpy as np
 from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
-
-import numpy as np
-from scipy import misc
-arr = misc.imread('/home/ed/camman.tif').astype('float32')
-arr=arr/255
-arr=np.reshape(arr,(128*128,1))
+from feature_models.identity import Identity
+from feature_models.gabor_wavelet_pyramid import GaborWaveletPyramid
+from response_models.kernel_ridge_regression import KernelRidgeRegression
 
 # Generate stimulus response pairs
-n_samples, n_features, n_voxels = 90, 128*128, 5
+n_samples, n_features, n_voxels = 90, 100, 5
 rng = np.random.RandomState(0)
 real_weights = rng.randn(n_features,n_voxels)
 stim_train = rng.randn(n_samples, n_features) 
@@ -27,7 +24,9 @@ resp_test = np.dot(stim_test,real_weights)
 
 
 # Encoding model
-em=EncodingModel()
+fm=Identity() #Feature model
+rm=KernelRidgeRegression() #Response model
+em=EncodingModel(fm,rm)
 
 # Fit encoding model
 em.fit(stim_train,resp_train)

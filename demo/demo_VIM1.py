@@ -9,6 +9,9 @@ from encoding_model.EncodingModel import EncodingModel
 from matplotlib import pyplot as plt
 import tables
 import scipy.io
+from feature_models.identity import Identity
+from feature_models.gabor_wavelet_pyramid import GaborWaveletPyramid
+from response_models.kernel_ridge_regression import KernelRidgeRegression
 
 
 # Import data from the VIM-1 dataset, ROI=V1 (region of interest)
@@ -43,7 +46,9 @@ V1resp_train=V1resp_train[:,target_vox]
 V1resp_val=V1resp_val[:,target_vox]
 
 # Define encoding model
-em=EncodingModel()
+fm=Identity() #Feature model
+rm=KernelRidgeRegression() #Response model
+em=EncodingModel(fm,rm)
 
 # Fit encoding model 
 em.fit(stim_train,V1resp_train)

@@ -8,9 +8,9 @@ from response_models.kernel_ridge_regression import KernelRidgeRegression
 class EncodingModel(object):
     
     # Select feature and response models ***
-    def __init__(self):
-        self.fm = GaborWaveletPyramid()
-        self.rm = KernelRidgeRegression()
+    def __init__(self,fm,rm):
+        self.fm = fm
+        self.rm = rm
     
     # Train encoding model
     def fit(self,stimulus,response):
