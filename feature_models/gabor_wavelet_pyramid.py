@@ -44,9 +44,9 @@ class GaborWaveletPyramid(FeatureModel):
                                         numberOfElements_1 * numberOfElements_1))        
         G[1]               = np.zeros(G[0].shape)
         i1                 = 0            
+        print('Generating wavelets')        
         for i2 in range (0 , len(lam)):
             x_0 = np.linspace(FOV[0], FOV[-1], numberOfElements_3[i2])
-            print(i2)
             for i3 in range (0, numberOfElements_2):   
                 for i4 in range ( 0 , numberOfElements_3[i2]):
                     for i5 in range( 0 , numberOfElements_3[i2]):

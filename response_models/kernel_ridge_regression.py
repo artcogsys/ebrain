@@ -179,6 +179,7 @@ class KernelRidgeRegression(ResponseModel):
             print "PREDICT_LINEAR_KERNEL_RIDGE_REGRESSION: %d / %d" % (i+1,L)
             X[i]=(X[i]-MU[i])/SIGMA[i]
             X[i][np.isnan(X[i])] = 0
+            X[i][np.isinf(X[i])] = 0
             Y_hat[i] = np.dot(X[i],BETA_hat[i]) 
         return Y_hat
             

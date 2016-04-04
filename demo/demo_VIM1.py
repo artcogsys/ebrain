@@ -9,9 +9,6 @@ from encoding_model.EncodingModel import EncodingModel
 from matplotlib import pyplot as plt
 import tables
 import scipy.io
-from feature_models.identity import Identity
-from feature_models.gabor_wavelet_pyramid import GaborWaveletPyramid
-from response_models.kernel_ridge_regression import KernelRidgeRegression
 
 
 # Import data from the VIM-1 dataset, ROI=V1 (region of interest)
@@ -33,9 +30,9 @@ V1resp_train[np.isnan(V1resp_train)]=0
 V1resp_val=V1resp_val[:,mask]
 V1resp_val[np.isnan(V1resp_val)]=0
 
-stim_train = Stimuli["stimTrn"].astype('float64')
+stim_train = Stimuli["stimTrn"].astype('float64')+0.55
 stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim_train.shape[2]],order="F")
-stim_val = Stimuli["stimVal"].astype('float64')
+stim_val = Stimuli["stimVal"].astype('float64')+0.55
 stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]],order="F")
 
 # Select n random voxels for demo set to 
@@ -46,9 +43,7 @@ V1resp_train=V1resp_train[:,target_vox]
 V1resp_val=V1resp_val[:,target_vox]
 
 # Define encoding model
-fm=Identity() #Feature model
-rm=KernelRidgeRegression() #Response model
-em=EncodingModel(fm,rm)
+em=EncodingModel()
 
 # Fit encoding model 
 em.fit(stim_train,V1resp_train)
@@ -103,10 +98,3 @@ for i in range(0,dPoints):
     C=corr2_coeff (np.expand_dims(V1resp_val_hat[0][i,:],axis=1).T ,  V1resp_val)
     ranking[i]=np.sum(C>C[:,i])+1
 print 'identification performance: ',np.mean(ranking),'/ 120 (mean ranking)'
-## Plot encoding performance Bokeh (Nicer but may require $ pip install bokeh)
-#from bokeh.plotting import figure, output_file, show
-#output_file("encoding_performance.html", title="encoding performance")
-#p = figure(title="econding performance", x_axis_label='voxel', 
-#            y_range=[-1, 1], y_axis_label='R', x_axis_type="log", x_range=[1, len(R)])
-#p.line(np.arange(len(R))+1,sorted(R, reverse=True), line_width=2)
-#show(p)
