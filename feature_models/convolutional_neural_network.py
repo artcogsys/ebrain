@@ -101,7 +101,7 @@ class CNN(FeatureModel):
         last_bsize=s[0]%bsize
         for i in range(0,batches):
             features[i*bsize:i*bsize+bsize,:] = np.reshape(self.get_activations(model,self.layer,X[i*bsize:i*bsize+bsize,:,:,:]),(bsize,s2))
-            print "MAKING CNN FEATURES: %d / %d" % ((i+1)*bsize,s[0])  
+            print("MAKING CNN FEATURES: %d / %d" % ((i+1)*bsize,s[0]))  
         if last_bsize>0:    
             features[-last_bsize:,:] == np.reshape(self.get_activations(model,self.layer,np.reshape(X[-last_bsize:,:,:,:],(last_bsize,3,224,224))),(last_bsize,s2))
         return features

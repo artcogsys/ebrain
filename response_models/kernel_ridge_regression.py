@@ -56,14 +56,14 @@ class KernelRidgeRegression(ResponseModel):
     
     def get_R_and_lambda(self,K,Y,k,n):
         d = Y.shape
-        folds = list(xrange(k))
+        folds = list(range(k))
         Indices = np.kron(np.ones( math.ceil(float(d[0])/k)),folds)
         Indices = np.sort(Indices[:d[0]])
         lam = self.get_lambda(K,n)
         Y_hat = np.full([d[0],d[1],n],np.nan)
     
         for i in range(0,k):
-            Train = (Indices<>i)
+            Train = (Indices!=i)
             S = np.sum(Train)
             N = np.full([S,d[1],n],np.nan)
             I = np.eye(S)
@@ -117,7 +117,7 @@ class KernelRidgeRegression(ResponseModel):
         R      = np.full([d[1],n, L],np.nan)  
 
         for i in range(0,L):
-            print "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (a / c): %d / %d" % (i+1,L)
+            print("'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (a / c): %d / %d" % (i+1,L))
      
 
             MU[i] = np.mean(X[i], axis=0)
@@ -134,7 +134,7 @@ class KernelRidgeRegression(ResponseModel):
 
 
         for i in range(0,d[1]):
-            print "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): %d / %d" % (i+1,d[1])
+            print("'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): %d / %d" % (i+1,d[1]))
             r_hat[i] = np.amax( np.reshape(R,(d[1],n*L))[i,:])
             I = np.argmax( np.reshape(R,(d[1],n*L))[i,:] )
             I,J = self.ind2sub((n, L), np.asarray(I))
@@ -149,7 +149,7 @@ class KernelRidgeRegression(ResponseModel):
             lambda_hat[H_0] = np.nan;
 
         for i in range(0,L):
-            print "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (c / c): %d / %d" % (i+1,L)
+            print("'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (c / c): %d / %d" % (i+1,L))
             BETA_hat[i]= self.get_BETA_hat(K[i], X[i], Y[:, np.squeeze(X_hat == i)], lambda_hat[X_hat == i])
         
         self.BETA_hat =BETA_hat
@@ -176,7 +176,7 @@ class KernelRidgeRegression(ResponseModel):
         L = len(X)
         Y_hat = [0]*L
         for i in range(0,L):
-            print "PREDICT_LINEAR_KERNEL_RIDGE_REGRESSION: %d / %d" % (i+1,L)
+            print("PREDICT_LINEAR_KERNEL_RIDGE_REGRESSION: %d / %d" % (i+1,L))
             X[i]=(X[i]-MU[i])/SIGMA[i]
             X[i][np.isnan(X[i])] = 0
             X[i][np.isinf(X[i])] = 0
