@@ -6,6 +6,8 @@ os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
 
 import numpy as np
 from encoding_model.EncodingModel import EncodingModel
+from feature_models.gabor_wavelet_pyramid import GaborWaveletPyramid
+from response_models.kernel_ridge_regression import KernelRidgeRegression
 from matplotlib import pyplot as plt
 import tables
 import scipy.io
@@ -43,7 +45,9 @@ V1resp_train=V1resp_train[:,target_vox]
 V1resp_val=V1resp_val[:,target_vox]
 
 # Define encoding model
-em=EncodingModel()
+fm=GaborWaveletPyramid()
+rm=KernelRidgeRegression()
+em=EncodingModel(fm,rm)
 
 # Fit encoding model 
 em.fit(stim_train,V1resp_train)

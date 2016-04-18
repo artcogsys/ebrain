@@ -10,7 +10,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 from encoding_model.EncodingModel import EncodingModel
 from feature_models.identity import Identity
-from feature_models.gabor_wavelet_pyramid import GaborWaveletPyramid
 from response_models.kernel_ridge_regression import KernelRidgeRegression
 
 # Generate stimulus response pairs
@@ -24,7 +23,9 @@ resp_test = np.dot(stim_test,real_weights)
 
 
 # Encoding model
-em=EncodingModel()
+fm=Identity() #Feature model
+rm=KernelRidgeRegression() #Response model
+em=EncodingModel(fm,rm)
 
 # Fit encoding model
 em.fit(stim_train,resp_train)
