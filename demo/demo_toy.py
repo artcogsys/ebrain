@@ -24,9 +24,7 @@ resp_test = np.dot(stim_test,real_weights)
 
 
 # Encoding model
-fm=Identity() #Feature model
-rm=KernelRidgeRegression() #Response model
-em=EncodingModel(fm,rm)
+em=EncodingModel()
 
 # Fit encoding model
 em.fit(stim_train,resp_train)

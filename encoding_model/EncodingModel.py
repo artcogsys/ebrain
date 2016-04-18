@@ -11,8 +11,8 @@ class EncodingModel(object):
     # Select feature and response models ***
     def __init__(self):
         #self.fm = GaborWaveletPyramid()
-        #self.fm = Identity()
-        self.fm = CNN()
+        #self.fm = CNN()
+        self.fm = Identity()       
         self.rm = KernelRidgeRegression()
     
     # Train encoding model
