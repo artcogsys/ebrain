@@ -4,11 +4,11 @@
 
 #Set your ebrain base directory ***
 import os
-os.chdir('/home/ed/Documents/Code/PYTHON/ebrain')
+os.chdir('/vol/ccnlab-scratch1/egrant/ebrain')
 
 import numpy as np
 from matplotlib import pyplot as plt
-from encoding_model.EncodingModel import EncodingModel
+from encoding_models.encoding_model import EncodingModel
 from feature_models.identity import Identity
 from response_models.kernel_ridge_regression import KernelRidgeRegression
 

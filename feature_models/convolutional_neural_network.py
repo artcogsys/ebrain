@@ -11,13 +11,13 @@ import skimage.transform
 
 class CNN(FeatureModel):
     
-    def __init__(self):  
+    def __init__(self,model_path,channels=1,layer=5):  
         # path to vgg16_weights.h5
-        self.model_path      = '/home/ed/Documents/Code/PYTHON/ebrain/Data/vgg16_weights.h5'
-        # grayscale(channels=1),RGB(channels=3)
-        self.channels        = 1  
+        self.model_path      = model_path
+        # grayscale(channels=1)
+        self.channels        = channels  
         #target layer activations
-        self.layer            = 9
+        self.layer           = layer
  
     def get_activations(self,model, layer, X_batch):
         get_activations = th.function([model.layers[0].input], model.layers[layer].get_output(train=False), allow_input_downcast=True)

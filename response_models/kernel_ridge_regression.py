@@ -10,10 +10,10 @@ from scipy.stats import t
 
 class KernelRidgeRegression(ResponseModel):
     
-    def __init__(self):
-        self.alpha=2.5e-4
-        self.n=10
-        self.k=3
+    def __init__(self,alpha=2.5e-4,n=10,k=3):
+        self.alpha=alpha
+        self.n=n
+        self.k=k
         
     def ind2sub(self,array_shape, ind):
         ind[np.asarray(ind < 0)] = -1
@@ -51,7 +51,7 @@ class KernelRidgeRegression(ResponseModel):
                     break
                 
     
-        return lam+0.0001 #Prevents singularness. ask Umut 
+        return lam+0.0001 #Prevents singular matrix
                 
     
     def get_R_and_lambda(self,K,Y,k,n):

@@ -11,7 +11,8 @@ import skimage.transform
 
 class GaborWaveletPyramid(FeatureModel):
     
-    def __init__(self):      
+    def __init__(self,cell_type='complex'): 
+        self.cell_type = cell_type
         self.b      = np.array([1])
         self.FOV    = np.linspace(-63.5,63.5,128)
         self.gamma  = 1
@@ -44,8 +45,9 @@ class GaborWaveletPyramid(FeatureModel):
                                         numberOfElements_1 * numberOfElements_1))        
         G[1]               = np.zeros(G[0].shape)
         i1                 = 0            
-        print('Generating wavelets')        
+
         for i2 in range (0 , len(lam)):
+            print 'GENERATING_WAVELETS',1+i2,'of',len(lam)   
             x_0 = np.linspace(FOV[0], FOV[-1], numberOfElements_3[i2])
             for i3 in range (0, numberOfElements_2):   
                 for i4 in range ( 0 , numberOfElements_3[i2]):
@@ -60,7 +62,6 @@ class GaborWaveletPyramid(FeatureModel):
         self.G = self.GABOR_WAVELET_PYRAMID(self.b, self.FOV, self.gamma, self.lam, self.sigma, self.theta)
     
     def predict(self,X): #Return predictions  
-        resp=[0]*2
         g=[0]*2
         g[0]=np.reshape(self.G[0],(self.G[0].shape[0],self.G[0].shape[1]))
         g[1]=np.reshape(self.G[1],(g[0].shape))
@@ -71,12 +72,14 @@ class GaborWaveletPyramid(FeatureModel):
         x=np.reshape(X,(X.shape[0]*X.shape[1],X.shape[2]))
         
         #Simple cell responses
-        resp[0]=np.dot(g[0],x).T 
+        if self.cell_type=='simple':
+            return np.dot(g[0],x).T    
         
         #Complex cell responses
-        resp[1]=np.sqrt( np.power(np.dot(g[0],x),2) + np.power(np.dot(g[1],x),2)).T
+        if self.cell_type=='complex':
+            return np.sqrt( np.power(np.dot(g[0],x),2) + np.power(np.dot(g[1],x),2)).T
 
-        return resp
+  
 
 
 
