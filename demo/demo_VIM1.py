@@ -39,8 +39,8 @@ stim_train = np.reshape(stim_train,[stim_train.shape[0],stim_train.shape[1]*stim
 stim_val = Stimuli["stimVal"].astype('float64')+0.55
 stim_val = np.reshape(stim_val,[stim_val.shape[0],stim_val.shape[1]*stim_val.shape[2]],order="F")
 
-# Select n random voxels for demo set to 
-n_vox=V1resp_train.shape[1]   #set to 'V1resp_train.shape[1]' for all
+# Select n random voxels for demo set
+n_vox=V1resp_train.shape[1]   #set to 'V1resp_train.shape[1]' for all voxels
 np.random.seed(0)
 target_vox=np.random.randint(n_vox, size=n_vox)
 V1resp_train=V1resp_train[:,target_vox]
