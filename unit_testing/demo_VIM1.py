@@ -18,8 +18,8 @@ import scipy.io
 # Import data from the VIM-1 dataset, ROI=V1 (region of interest)
 # Dataset available from https://crcns.org/data-sets
 # Dataset info from https://crcns.org/files/data/vim-1/crcns-vim-1-readme.pdf
-EstimatedResponses = tables.open_file('/vol/ccnlab-scratch1/egrant/ebrain/Data/EstimatedResponses.mat')
-Stimuli = scipy.io.loadmat('/vol/ccnlab-scratch1/egrant/ebrain/Data/Stimuli.mat',struct_as_record=True)
+EstimatedResponses = tables.open_file('/vol/ccnlab-scratch1/egrant/ebrain/Data/VIM1/EstimatedResponses.mat')
+Stimuli = scipy.io.loadmat('/vol/ccnlab-scratch1/egrant/ebrain/Data/VIM1/Stimuli.mat',struct_as_record=True)
 data_train = EstimatedResponses.get_node('/dataTrnS1')[:].astype('float64')
 data_val = EstimatedResponses.get_node('/dataValS1')[:].astype('float64')
 ROI = EstimatedResponses.get_node('/roiS1')[:].flatten()
@@ -49,8 +49,8 @@ V1resp_val=V1resp_val[:,target_vox]
 # Define encoding model
 weights='/vol/ccnlab-scratch1/egrant/ebrain/Data/vgg16_weights.h5' #path to CNN weights
 #fm=CNN(weights) #CNN feature model
-#fm=Identity() #Identity feature model
-fm=GaborWaveletPyramid() #GWP feature model
+fm=Identity() #Identity feature model
+#fm=GaborWaveletPyramid() #GWP feature model
 rm=KernelRidgeRegression() #Response model
 em=EncodingModel(fm,rm)
 

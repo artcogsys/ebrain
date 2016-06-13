@@ -12,7 +12,7 @@ import skimage.transform
 class GaborWaveletPyramid(FeatureModel):
     
     def __init__(self,cell_type='complex'): 
-        self.cell_type = cell_type
+        self.cell_type = cell_type #'simple' or 'complex'
         self.b      = np.array([1])
         self.FOV    = np.linspace(-63.5,63.5,128)
         self.gamma  = 1
