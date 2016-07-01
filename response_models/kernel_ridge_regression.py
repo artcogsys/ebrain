@@ -139,14 +139,14 @@ class KernelRidgeRegression(ResponseModel):
             I = np.argmax( np.reshape(R,(d[1],n*L))[i,:] )
             I,J = self.ind2sub((n, L), np.asarray(I))
     
-            lambda_hat[i] = LAMBDA[I, J];
-            X_hat[i]      = J;
+            lambda_hat[i] = LAMBDA[I, J]
+            X_hat[i]      = J
             BETA_hat = [0]*d[1]  
             
-            H_0 = 1.0 - t.cdf(r_hat * np.sqrt((d[0] - 2.0) / (1.0 - r_hat** 2.0)), d[0] - 2.0) >= alpha;
+            H_0 = 1.0 - t.cdf(r_hat * np.sqrt((d[0] - 2.0) / (1.0 - r_hat** 2.0)), d[0] - 2.0) >= alpha
 
-            X_hat[H_0]      = np.nan;
-            lambda_hat[H_0] = np.nan;
+            X_hat[H_0]      = np.nan
+            lambda_hat[H_0] = np.nan
 
         for i in range(0,L):
             print("'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (c / c): %d / %d" % (i+1,L))

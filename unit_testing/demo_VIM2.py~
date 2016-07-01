@@ -94,13 +94,13 @@ V1LHresp_val=V1LHresp_val[em.val_feature_idx[:,0]+buff_size-1,:]
 
 
 ## Remove insignificant voxels
+print('Analyzing encoding performance')
 significant_vox=em.rm.H_0==False
 V1LHresp_val=V1LHresp_val[:,np.squeeze(significant_vox)]
 
 
 ## Analyze encoding performance
 #Get num of significant voxels
-print('Analyzing encoding performance')
 print '\nsigfniciant voxels:',n_vox-np.sum(em.rm.H_0),'/', n_vox, 'at alpha =',em.rm.alpha
 
 

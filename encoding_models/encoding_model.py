@@ -11,17 +11,17 @@ from encoding_models.ring_buffer import RingBuffer
 class EncodingModel(object):
     
     # Select feature and response models ***
-    def __init__(self,fm,rm,buff_size = 1,mode = 'full_batch'):
+    def __init__(self,fm,rm,buff_size = 1,mode = 'batch'):
         self.fm = fm       
         self.rm = rm
         self.buff_size=buff_size
         self.first=True
-        self.mode=mode
+        self.mode=mode  #mode = 'batch' or 'online'
         
     # Hemodynamic response model
     def ringBuff(self,feature):
         # Full batch mode
-        if self.mode == 'full_batch':
+        if self.mode == 'batch':
             self.nexamples=feature.shape[0] # Number of training examples
             self.nfeatures=feature.shape[1]  # Number of features
             self.buffer_model=RingBuffer(self.nexamples,self.nfeatures,'float')# Create training ring buffer instance        
@@ -63,7 +63,7 @@ class EncodingModel(object):
         self.val_feature=self.fm.predict(stimulus)
 
         if  self.buff_size>1: # Ring Buffer features
-            if self.mode == 'full_batch':
+            if self.mode == 'batch':
                 self.val_feature,self.val_feature_idx=self.ringBuff(self.val_feature)        
             if self.mode == 'online':
                 self.val_feature=self.ringBuff(self.val_feature)       
