@@ -1,18 +1,6 @@
 {
  "cells": [
   {
-   "cell_type": "code",
-   "execution_count": 9,
-   "metadata": {
-    "collapsed": true
-   },
-   "outputs": [],
-   "source": [
-    "import warnings\n",
-    "warnings.filterwarnings(\"ignore\", category=DeprecationWarning) "
-   ]
-  },
-  {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
