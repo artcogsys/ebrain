@@ -139,7 +139,7 @@
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 1 / 490\n",
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 2 / 490\n",
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 3 / 490\n",
-      "'...",
+      "'...\n",
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 487 / 490\n",
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 488 / 490\n",
       "'TRAIN_LINEAR_KERNEL_RIDGE_REGRESSION (b / c): 489 / 490\n",
